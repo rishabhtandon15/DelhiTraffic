@@ -239,8 +239,12 @@ with tab_map:
     
     map_view = st.radio("Map Display Mode:", ["Vehicle Count Density Heatmap", "CO2 Emission Hotspot Bubbles"], horizontal=True)
     
-    scatter_fn = getattr(px, 'scatter_map', px.scatter_mapbox)
-    style_param = {'map_style': 'open-street-map'} if hasattr(px, 'scatter_map') else {'mapbox_style': 'carto-positron'}
+    if hasattr(px, 'scatter_map'):
+        scatter_fn = px.scatter_map
+        style_param = {'map_style': 'open-street-map'}
+    else:
+        scatter_fn = px.scatter_mapbox
+        style_param = {'mapbox_style': 'carto-positron'}
     
     if map_view == "Vehicle Count Density Heatmap":
         fig_map = scatter_fn(
